@@ -22,7 +22,6 @@ class Card:
 
 class Deck:
     def __init__(self):
-        # Initialize list of cards
         self.cards = []
         # Since suits don't matter in Blackjack we can
         # add cards by multiples of four
@@ -73,9 +72,6 @@ while continue_game:
 
     # Continue playing until the deck doesn't have enough cards to start a new game
     while len(dealer.deck.cards) > 3:
-        # Display length of deck
-        print(f'There are {len(dealer.deck.cards)} cards in the deck.')
-
         # Ask the player to place a bet
         player.bet_amount = int(input(f'{player.name}, place your bet: '))
         # Input validation for bet
@@ -88,7 +84,7 @@ while continue_game:
             player.current_hand.append(dealer.deal_a_card())
             dealer.current_hand.append(dealer.deal_a_card())
 
-        # Display player's cards
+        # Display both of player's cards
         print(f"{player.name}'s cards: {player.current_hand[0].rank} and {player.current_hand[1].rank}")
         # Display one of dealer's cards
         print(f"{dealer.name}'s cards: {dealer.current_hand[0].rank} and Face Down")
@@ -112,7 +108,7 @@ while continue_game:
                 player.current_hand.append(dealt_card)
                 player_hand_value += dealt_card.value
 
-                if dealt_card.rank == 'Eight' or dealt_card.rank == 'Ace':
+                if dealt_card.rank in ('Eight', 'Ace'):
                     print(f'{player.name} drew an {dealt_card.rank}.')
                 else:
                     print(f'{player.name} drew a {dealt_card.rank}.')
@@ -156,7 +152,7 @@ while continue_game:
                 dealer.current_hand.append(dealt_card)
                 dealer_hand_value += dealt_card.value
 
-                if dealt_card.rank == 'Eight' or dealt_card.rank == 'Ace':
+                if dealt_card.rank in ('Eight', 'Ace'):
                     print(f'{dealer.name} drew an {dealt_card.rank}.')
                 else:
                     print(f'{dealer.name} drew a {dealt_card.rank}.')
@@ -200,11 +196,8 @@ while continue_game:
             continue_game = False
             break
 
-        """REMOVE: Use to test if statement below."""
-        # dealer.deck.cards = dealer.deck.cards[0:4]
-
         # If there are only four cards left in the deck, deal both players two cards,
-        # evaluate that hand, and then end the game
+        # evaluate the last play, determine a winner based on winnings, and end the game
         if len(dealer.deck.cards) == 4:
             print('There are four cards left in the deck!')
 
@@ -220,7 +213,7 @@ while continue_game:
                 player.current_hand.append(dealer.deal_a_card())
                 dealer.current_hand.append(dealer.deal_a_card())
 
-            # Display player's cards
+            # Display both of player's cards
             print(f"{player.name}'s cards: {player.current_hand[0].rank} and {player.current_hand[1].rank}")
             # Display one of dealer's cards
             print(f"{dealer.name}'s cards: {dealer.current_hand[0].rank} and Face Down")
@@ -229,13 +222,12 @@ while continue_game:
             # isn't reset until we jump back to the top, so reset it here
             player_hand_value = 0
             dealer_hand_value = 0
-            # Evaluate both players hands
+            # Evaluate player and dealer hands
             for card in player.current_hand:
                 player_hand_value += card.value
             for card in dealer.current_hand:
                 dealer_hand_value += card.value
 
-            # Tie
             if player_hand_value == dealer_hand_value:
                 print('Tie!')
             # Player win
