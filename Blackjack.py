@@ -62,11 +62,7 @@ class Dealer:
         return f'Player: {self.name} \nBankroll: ${self.bankroll:,}'
 
 
-# What info do we need to pass into the function?
-# We need to pass in the player to update their attributes, as well as the result to
-# determine if they gained or lost money
 def update_bankroll_and_winnings(obj, result):
-    # Evaluating player win or loss
     if isinstance(obj, Player):
         if result == 'Win':
             player.bankroll += player.bet_amount
@@ -78,7 +74,6 @@ def update_bankroll_and_winnings(obj, result):
             player.winnings -= player.bet_amount
             dealer.bankroll += player.bet_amount
             dealer.winnings += player.bet_amount
-    # Evaluating dealer win or loss
     elif isinstance(obj, Dealer):
         if result == 'Win':
             dealer.bankroll += player.bet_amount
