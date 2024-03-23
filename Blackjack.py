@@ -62,6 +62,36 @@ class Dealer:
         return f'Player: {self.name} \nBankroll: ${self.bankroll:,}'
 
 
+# What info do we need to pass into the function?
+# We need to pass in the player to update their attributes, as well as the result to
+# determine if they gained or lost money
+def update_bankroll_and_winnings(obj, result):
+    # Evaluating player win or loss
+    if isinstance(obj, Player):
+        if result == 'Win':
+            player.bankroll += player.bet_amount
+            player.winnings += player.bet_amount
+            dealer.bankroll -= player.bet_amount
+            dealer.winnings -= player.bet_amount
+        elif result == 'Loss':
+            player.bankroll -= player.bet_amount
+            player.winnings -= player.bet_amount
+            dealer.bankroll += player.bet_amount
+            dealer.winnings += player.bet_amount
+    # Evaluating dealer win or loss
+    elif isinstance(obj, Dealer):
+        if result == 'Win':
+            dealer.bankroll += player.bet_amount
+            dealer.winnings += player.bet_amount
+            player.bankroll -= player.bet_amount
+            player.winnings -= player.bet_amount
+        elif result == 'Loss':
+            dealer.bankroll -= player.bet_amount
+            dealer.winnings -= player.bet_amount
+            player.bankroll += player.bet_amount
+            player.winnings += player.bet_amount
+
+
 player = Player('Yousef', 10000)
 dealer = Dealer(10000)
 print()
@@ -116,30 +146,28 @@ while continue_game:
                 # Player win
                 if player_hand_value == 21:
                     print(f'{player.name} won with {player_hand_value}! {dealer.name} had {dealer_hand_value}.')
-                    player.bankroll += player.bet_amount
-                    player.winnings += player.bet_amount
-                    dealer.bankroll -= player.bet_amount
-                    dealer.winnings -= player.bet_amount
+
+                    update_bankroll_and_winnings(player, 'Win')
 
                     print(f"{player.name}'s bankroll: ${player.bankroll:,}")
                     print(f"{dealer.name}'s bankroll: ${dealer.bankroll:,}")
 
                     player.current_hand.clear()
                     dealer.current_hand.clear()
+
                     break
                 # Player bust
                 elif player_hand_value > 21:
                     print(f'{player.name} bust with {player_hand_value}! {dealer.name} won!')
-                    player.bankroll -= player.bet_amount
-                    player.winnings -= player.bet_amount
-                    dealer.bankroll += player.bet_amount
-                    dealer.winnings += player.bet_amount
+
+                    update_bankroll_and_winnings(player, 'Loss')
 
                     print(f"{player.name}'s bankroll: ${player.bankroll:,}")
                     print(f"{dealer.name}'s bankroll: ${dealer.bankroll:,}")
 
                     player.current_hand.clear()
                     dealer.current_hand.clear()
+
                     break
                 else:
                     choice = int(input('Choose 1 to hit or 2 to stand: '))
@@ -160,30 +188,28 @@ while continue_game:
                 # Dealer win
                 if player_hand_value < dealer_hand_value <= 21:
                     print(f'{dealer.name} won with {dealer_hand_value}! {player.name} had {player_hand_value}.')
-                    dealer.bankroll += player.bet_amount
-                    dealer.winnings += player.bet_amount
-                    player.bankroll -= player.bet_amount
-                    player.winnings -= player.bet_amount
+
+                    update_bankroll_and_winnings(dealer, 'Win')
 
                     print(f"{dealer.name}'s bankroll: ${dealer.bankroll:,}")
                     print(f"{player.name}'s bankroll: ${player.bankroll:,}")
 
                     player.current_hand.clear()
                     dealer.current_hand.clear()
+
                     break
                 # Dealer bust
                 elif dealer_hand_value > 21:
                     print(f'{dealer.name} bust with {dealer_hand_value}! {player.name} won!')
-                    player.bankroll += player.bet_amount
-                    player.winnings += player.bet_amount
-                    dealer.bankroll -= player.bet_amount
-                    dealer.winnings -= player.bet_amount
+
+                    update_bankroll_and_winnings(dealer, 'Loss')
 
                     print(f"{player.name}'s bankroll: ${player.bankroll:,}")
                     print(f"{dealer.name}'s bankroll: ${dealer.bankroll:,}")
 
                     player.current_hand.clear()
                     dealer.current_hand.clear()
+
                     break
 
         # End the game if either the dealer or player runs out of money
@@ -233,17 +259,11 @@ while continue_game:
             # Player win
             elif player_hand_value > dealer_hand_value:
                 print(f'{player.name} won with {player_hand_value}! {dealer.name} had {dealer_hand_value}.')
-                player.bankroll += player.bet_amount
-                player.winnings += player.bet_amount
-                dealer.bankroll -= player.bet_amount
-                dealer.winnings -= player.bet_amount
+                update_bankroll_and_winnings(player, 'Win')
             # Dealer win
             else:
                 print(f'{dealer.name} won with {dealer_hand_value}! {player.name} had {player_hand_value}.')
-                dealer.bankroll += player.bet_amount
-                dealer.winnings += player.bet_amount
-                player.bankroll -= player.bet_amount
-                player.winnings -= player.bet_amount
+                update_bankroll_and_winnings(dealer, 'Win')
 
             if dealer.winnings > player.winnings:
                 print(f"{dealer.name}'s winnings: ${dealer.winnings:,} \n{dealer.name} wins!")
